@@ -47,7 +47,7 @@ telegraf_config_remote_agent:
       agent: {{ remote_agent }}
 
 {%- set remote_agent_inputs = {} %}
-{%- for node_name, node_grains in salt['mine.get']('*', 'grains.items').iteritems() %}
+{%- for node_name, node_grains in salt['mine.get']('*', 'grains.items').items() %}
   {%- set remote_agent_input = node_grains.get('telegraf', {}).get('remote_agent', {}).get('input', {}) %}
   {%- if remote_agent_input %}
     {%- do salt['defaults.merge'](remote_agent_inputs, remote_agent_input) %}
@@ -55,7 +55,7 @@ telegraf_config_remote_agent:
 {%- endfor %}
 {%- do salt['defaults.merge'](remote_agent_inputs, remote_agent.input) %}
 
-{%- for name,values in remote_agent_inputs.iteritems() %}
+{%- for name,values in remote_agent_inputs.items() %}
 
 {%- if values is not mapping or values.get('enabled', True) %}
 input_{{ name }}_remote_agent:
@@ -92,7 +92,7 @@ input_{{ name }}_remote_agent:
 {%- endfor %}
 
 {%- set remote_agent_outputs = {} %}
-{%- for node_name, node_grains in salt['mine.get']('*', 'grains.items').iteritems() %}
+{%- for node_name, node_grains in salt['mine.get']('*', 'grains.items').items() %}
   {%- set remote_agent_output = node_grains.get('telegraf', {}).get('remote_agent', {}).get('output', {}) %}
   {%- if remote_agent_output %}
     {%- do salt['defaults.merge'](remote_agent_outputs, remote_agent_output) %}
@@ -100,7 +100,7 @@ input_{{ name }}_remote_agent:
 {%- endfor %}
 {%- do salt['defaults.merge'](remote_agent_outputs, remote_agent.output) %}
 
-{%- for name,values in remote_agent_outputs.iteritems() %}
+{%- for name,values in remote_agent_outputs.items() %}
 
 output_{{ name }}_remote_agent:
   file.managed:
